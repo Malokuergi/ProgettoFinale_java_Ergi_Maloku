@@ -1,48 +1,53 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+
 <head th:insert="~{index :: head}"></head>
+
 <body>
-    <head th:insert="~{index :: navbar}"></head>
+    <header th:replace="~{index :: navbar}"></header>
 
-    <div class="vh-100">
-        <div class="container-fluid p-5 bg-secondary-subtle text-center">
+    <main class="min-vh-100">
+        <section class="bg-body-tertiary py-5">
+            <div class="container">
+                <p class="text-uppercase text-secondary fw-semibold mb-2">Area di gestione</p>
+                <h1 class="display-5 fw-bold mb-2">Richiesta</h1>
+                <p class="lead text-secondary mb-0" th:text="${request.user.username}">
+                    Nome utente
+                </p>
+            </div>
+        </section>
+
+        <section class="container py-5">
             <div class="row justify-content-center">
-                <div class="col-12">
-                    <span class="h1">Richiesta</span>
+                <div class="col-12 col-lg-8">
+                    <div class="card shadow-sm">
+                        <div class="card-body p-4 p-md-5">
+                            <h2 class="h5 fw-bold mb-3">Messaggio della richiesta</h2>
+                            <p class="lh-lg mb-4" th:text="${request.body}">Testo della richiesta</p>
+
+                            <hr class="my-4">
+
+                            <div class="d-flex flex-wrap gap-2">
+                                <form th:action="@{/operations/career/request/accept/{id}(id=${request.id})}"
+                                    method="post">
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="fa-solid fa-check me-2"></i>Accetta
+                                    </button>
+                                </form>
+
+                                <a th:href="@{/admin/dashboard}" class="btn btn-outline-secondary">
+                                    <i class="fa-solid fa-arrow-left me-2"></i>Torna alla dashboard
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
+    </main>
 
-        <div class="container my-5">
-            <div class="row justify-content-center">
-                <div class="col-12 col-md-8 d-flex flex-column">
-                    <div class="text-center">
-                        <h2 th:text="${request.user.username}">Nome utente</h2>
-                    </div>
-                </div>
-                <hr>
-                <div class="col-12 col-md-8 d-flex flex-column align-items-center">
-                    <div>
-                        <p th:text="${request.body}">Body</p>
-                    </div>
-
-                    <div class="d-flex">
-                        <form th:action="@{/operations/career/request/accept/{id}(id=${request.id})}" method="post">
-                            <button type="submit" class="btn btn-primary m-2">
-                                Accetta
-                            </button>
-                        </form>
-                        <a th:href="@{/admin/dashboard}" class="btn btn-primary m-2">
-                            Torna indietro
-                        </a>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <head th:insert="~{index :: footer}"></head>
+    <footer th:replace="~{index :: footer}"></footer>
     <script th:replace="~{index :: bootstrapScript}"></script>
 </body>
+
 </html>

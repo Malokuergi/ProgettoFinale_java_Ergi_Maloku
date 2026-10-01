@@ -1,7 +1,7 @@
 package it.aulab.progetto_finale.dtos;
 
 import java.time.LocalDate;
-import java.util.Locale.Category;
+import it.aulab.progetto_finale.models.Category;
 
 import it.aulab.progetto_finale.models.Image;
 import it.aulab.progetto_finale.models.User;

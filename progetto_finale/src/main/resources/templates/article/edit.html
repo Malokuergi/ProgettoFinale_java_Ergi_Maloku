@@ -1,87 +1,112 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
 
 <head th:insert="~{index :: head}"></head>
 
 <body>
+    <header th:replace="~{index :: navbar}"></header>
 
-    <head th:insert="~{index :: navbar}"></head>
+    <main class="min-vh-100">
+        <section class="bg-body-tertiary py-5">
+            <div class="container">
+                <p class="text-uppercase text-secondary fw-semibold mb-2">Aulab Chronicle</p>
+                <h1 class="display-5 fw-bold mb-2">Modifica articolo</h1>
+                <p class="lead text-secondary mb-0" th:text="${article.title}">Titolo</p>
+            </div>
+        </section>
 
-    <div class="min-vh-100">
-        <div class="container-fluid p-5 bg-secondary-subtle text-center">
+        <section class="container py-5">
             <div class="row justify-content-center">
-                <div class="col-12">
-                    <span class="h1">Modifica articolo</span>
-                    <h2 th:text="${article.title}">Titolo</h2>
+                <div class="col-12 col-lg-10 col-xl-9">
+                    <div class="card shadow-sm">
+                        <div class="card-body p-4 p-md-5">
+                            <form th:action="@{/articles/update/{id}(id=${article.id})}" method="POST"
+                                th:object="${article}" enctype="multipart/form-data">
+
+                                <div class="row g-4">
+                                    <div class="col-12 col-md-6">
+                                        <label for="articleTitle" class="form-label fw-semibold">Titolo</label>
+                                        <input id="articleTitle" type="text" class="form-control" th:field="*{title}"
+                                            placeholder="Inserisci un titolo...">
+                                        <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}"
+                                            class="text-danger small mt-1 mb-0"></p>
+                                    </div>
+
+                                    <div class="col-12 col-md-6">
+                                        <label for="subtitle" class="form-label fw-semibold">Sottotitolo</label>
+                                        <input id="subtitle" type="text" class="form-control" th:field="*{subtitle}"
+                                            placeholder="Inserisci un sottotitolo...">
+                                        <p th:if="${#fields.hasErrors('subtitle')}" th:errors="*{subtitle}"
+                                            class="text-danger small mt-1 mb-0"></p>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label for="body" class="form-label fw-semibold">Articolo</label>
+                                        <textarea id="body" class="form-control" rows="8" th:field="*{body}"
+                                            placeholder="Inserisci il testo dell'articolo..."></textarea>
+                                        <p th:if="${#fields.hasErrors('body')}" th:errors="*{body}"
+                                            class="text-danger small mt-1 mb-0"></p>
+                                    </div>
+
+                                    <div class="col-12 col-md-6">
+                                        <label for="date" class="form-label fw-semibold">Data di pubblicazione</label>
+                                        <input id="date" type="date" class="form-control" th:field="*{publishDate}">
+                                        <p th:if="${#fields.hasErrors('publishDate')}" th:errors="*{publishDate}"
+                                            class="text-danger small mt-1 mb-0"></p>
+                                    </div>
+
+                                    <div class="col-12 col-md-6">
+                                        <label for="category" class="form-label fw-semibold">Categoria</label>
+                                        <select id="category" th:field="*{category}" class="form-select">
+                                            <option th:each="category : ${categories}" th:value="${category.id}"
+                                                th:text="${category.name}">
+                                            </option>
+                                        </select>
+                                        <p th:if="${#fields.hasErrors('category')}" th:errors="*{category}"
+                                            class="text-danger small mt-1 mb-0"></p>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <p class="form-label fw-semibold mb-2">Immagine attuale</p>
+
+                                        <div th:if="${article.image != null}" class="card">
+                                            <img th:src="${article.image.path}" class="card-img-top object-fit-cover"
+                                                alt="Immagine attuale dell'articolo">
+                                        </div>
+
+                                        <p th:unless="${article.image != null}" class="text-secondary mb-0">
+                                            Nessuna immagine presente.
+                                        </p>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label for="image" class="form-label fw-semibold">
+                                            Sostituisci immagine
+                                        </label>
+                                        <input type="file" name="file" id="image" class="form-control">
+                                        <div class="form-text">
+                                            Seleziona un nuovo file solo se vuoi sostituire l’immagine attuale.
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 d-flex flex-wrap gap-2 pt-2">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fa-solid fa-floppy-disk me-2"></i>Salva modifiche
+                                        </button>
+                                        <a th:href="@{/articles}" class="btn btn-outline-secondary">
+                                            Annulla
+                                        </a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
+    </main>
 
-        <div class="container">
-            <div class="row">
-                <div class="col-12 my-5">
-                    <form th:action="@{/articles/update/{id}(id=${article.id})}" method="POST" th:object="${article}"
-                        enctype="multipart/form-data">
-                        <div class="row mb-3">
-                            <div class="col">
-                                <label for="articleTitle" class="form-label">Titolo</label>
-                                <input id="articleTitle" type="text" class="form-control" th:field="*{title}"
-                                    placeholder="Inserisci un articolo...">
-                                <p th:errors="*{title}" class="text-danger" th:if="${#fields.hasErrors('title')}"></p>
-                            </div>
-                            <div class="col">
-                                <label for="subtitle" class="form-label">Sottotitolo</label>
-                                <input id="subtitle" type="text" class="form-control" th:field="*{subtitle}"
-                                    placeholder="Inserisci un sottotitolo...">
-                                <p th:errors="*{subtitle}" class="text-danger" th:if="${#fields.hasErrors('subtitle')}">
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="body" class="form-label">Articolo:</label>
-                            <input id="body" type="text" class="form-control" th:field="*{body}"
-                                placeholder="Inserisci un testo....">
-                            <p th:errors="*{body}" class="text-danger" th:if="${#fields.hasErrors('body')}"></p>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="date" class="form-label">Publish date (8 chars)</label>
-                            <input id="date" type="date" class="form-control" th:field="*{publishDate}"
-                                placeholder="yyyy/mm/dd">
-                        </div>
-                        <div class="mb-3">
-                            <label for="category" class="form-label">Category</label>
-                            <select id="category" th:field="*{category}" class="form-select">
-                                <option th:each="category:${categories}" th:value="${category.id}"
-                                    th:text="${category.name}"></option>
-                                <p th:errors="*{category}" class="text-danger" th:if="${#fields.hasErrors('category')}">
-                                </p>
-                            </select>
-                        </div>
-
-                        <div class="mb-3 d-flex flex-column" th:if="${article.image != null}">
-                            <label for="image" class="form-label">Immagine dell'articolo</label>
-                            <img th:src="${article.image.path}" id="image" alt="${article.image.path}">
-                        </div>
-                        <div th:unless="${article.image != null}">
-                            <label for="image" class="form-label">Immagine dell'articolo</label>
-                            <p>Immagine non presente</p>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="image" class="form-label">Image</label>
-                            <input type="file" name="file" id="image" class="form-control" />
-                        </div>
-
-                        <button type="submit" class="btn btn-success">Modifica articolo</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <head th:insert="~{index :: footer}"></head>
+    <footer th:replace="~{index :: footer}"></footer>
     <script th:replace="~{index :: bootstrapScript}"></script>
 </body>
 
